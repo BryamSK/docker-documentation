@@ -1,0 +1,29 @@
+#!/bin/sh
+SERVICIO=DOCKER
+COMPOSE=$(docker compose version)
+DOCKER=$(docker -v)
+STATS=$(docker stats --no-stream)
+PRINTF='# Servidor '$SERVICIO'
+| Programa       | version                                |
+| :--------------| :------------------------------------- |
+| Docker         | '$DOCKER'   |
+| Docker Compose | '$COMPOSE'         |
+
+
+## Manejo del servicio '$SERVICIO'
+-Detener e iniciar
+        systemct restart docker
+        systemct stop docker
+        systemct stary docker
+
+## Servicios en ejecución
+| Servicio       | Port      | Descripcion          | Service Name          |Ruta      |
+| :------------- | :-------- | :------------------- | :-------------------- |:-------- |
+| *Servicio**    | PORT      | Servidor Descripcion | Servicename.service   |/PATH/    |
+
+**** [Container List] ****
+'$STATS'
+**** [Container End] ****
+## Documentación
+'
+printf '%s\n' "$PRINTF"
