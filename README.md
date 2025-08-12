@@ -1,43 +1,28 @@
 # Show information and documentation of running Docker services at Linux OS startup
-## Add bash in update-motd.d
+## Add bash in /etc/profile.d
 
-cd /etc/update-motd.d/ && touch 99-service && chmod +x 99-serices
+touch /etc/profile.d/01_server.sh
 
-vim 99-serices
+vim /etc/profile.d/01_server.sh
 
 ```code
-#!/bin/sh
-SERVICE=DOCKER
-COMPOSE=$(docker compose version)
-DOCKER=$(docker -v)
-STATS=$(docker stats --no-stream)
-PRINTF='# Servidor '$SERVICIO'
-| Programa       | version                                |
-| :--------------| :------------------------------------- |
-| Docker         | '$DOCKER'   |
-| Docker Compose | '$COMPOSE'         |
+#!/bin/bash
 
+SERVICE="DOCKER"
+COMPOSE=$(docker compose version 2>/dev/null || echo "No instalado")
+DOCKER=$(docker -v 2>/dev/null || echo "No instalado")
+STATS=$(docker stats --no-stream 2>/dev/null || echo "No hay contenedores en ejecución")
 
-## Service Management '$SERVICE'
-        systemct restart docker
-        systemct stop docker
-        systemct stary docker
-
-## Servicios en ejecución
-| Service        | Port      | Descripcion          | Service Name          |Ruta      |
-| :------------- | :-------- | :------------------- | :-------------------- |:-------- |
-| **Service**    | port      | Servidor Descripcion | Service.service       |/PATH/    |
-
-**** [Container List] ****
-'$STATS'
-**** [Container List End] ****
-
-## Documentation
-
-[Docker](https://docs.docker.com/engine/)
-
-'
-printf '%s\n' "$PRINTF"
+echo -e ""
+echo -e "\033[1m🐳 Servicio: $SERVICE\033[0m"
+echo -e "    🛠️    \033[33mDocker:\033[1;92m $DOCKER\033[0m"
+echo -e "    📦   \033[33mDocker Compose:\033[1;92m $COMPOSE\033[0m"
+echo -e ""
+echo -e "\033[33m[Container List]\033[0m"
+echo -e "\033[1;92m$STATS\033[0m"
+echo -e ""
+echo -e "\033[33m📄 Documentación:\033[1;92m https://docs.docker.com/engine/\033[0m"
+echo -e ""
 
 ```
 
